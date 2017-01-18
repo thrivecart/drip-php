@@ -1,0 +1,7 @@
+{
+    "name": "alright/drip-php",
+    "description": "An object-oriented PHP wrapper for Drip's REST API v2.0",
+    "require": {
+        "php": "^5.3.3 || ^7.0"
+    }
+}
