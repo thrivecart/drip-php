@@ -4,5 +4,8 @@
     "require": {
         "php": ">=5.3.3"
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "autoload": {
+    	"classmap": ["Drip_API.class.php"]
+    }
 }
