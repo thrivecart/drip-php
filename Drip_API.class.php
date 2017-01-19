@@ -438,13 +438,12 @@ Class Drip_Api {
      */
     public function request ($url, $params = array(), $req_method = self::GET) {
     	$request = $this->make_request($this->api_end_point.$url, $params, $req_method);
-    	$buffer = json_decode($request['buffer'], TRUE);
+    	$body = json_decode($request['buffer'], TRUE);
 
-    	if (empty($buffer)) {
+    	if (empty($body)) {
     	    return;
         }
 
-        $body = $buffer[key($buffer)];
     	return $body;
     }
     
