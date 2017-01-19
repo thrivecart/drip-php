@@ -437,7 +437,15 @@ Class Drip_Api {
      * @throws Exception
      */
     public function request ($url, $params = array(), $req_method = self::GET) {
-    	return $this->make_request($this->api_end_point.$url, $params, $req_method);
+    	$request = $this->make_request($this->api_end_point.$url, $params, $req_method);
+    	$buffer = json_decode($request['buffer'], TRUE);
+
+    	if (empty($buffer)) {
+    	    return;
+        }
+
+        $body = $buffer[key($buffer)];
+    	return $body;
     }
     
     /**
@@ -470,7 +478,6 @@ Class Drip_Api {
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->connect_timeout);
-        curl_setopt($ch, CURLOPT_USERPWD, $this->api_token . ":" . ''); // no pwd
         curl_setopt($ch, CURLOPT_USERAGENT, empty($params['user_agent']) ? $this->user_agent : $params['user_agent']);
 
         if ($req_method == self::POST) { // We want post but no params to supply. Probably we have a nice link structure which includes all the info.
@@ -494,6 +501,7 @@ Class Drip_Api {
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Authorization: Bearer '.$this->api_token,
             'Accept:application/json, text/javascript, */*; q=0.01',
             'Content-Type: application/vnd.api+json',
         ));
