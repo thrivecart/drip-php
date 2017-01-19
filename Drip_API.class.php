@@ -427,6 +427,18 @@ Class Drip_Api {
 
         return $status;
     }
+
+    /**
+     *
+     * @param string $url
+     * @param array $params
+     * @param int $req_method
+     * @return type
+     * @throws Exception
+     */
+    public function request ($url, $params = array(), $req_method = self::GET) {
+    	return $this->make_request($this->api_end_point.$url, $params, $req_method);
+    }
     
     /**
      *
