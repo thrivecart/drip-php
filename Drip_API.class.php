@@ -28,13 +28,13 @@ Class Drip_Api {
      * @param string $api_token e.g. qsor48ughrjufyu2dadraasfa1212424
      * @throws Exception
      */
-    public function __construct($api_token) {
+    public function __construct($api_token = null) {
 			if(!empty($api_token)) {
 				$this->setApiToken($api_token);
 			}
     }
 
-		public function setApiToken($api_token) {
+		public function setApiToken($api_token = '') {
 			$api_token = trim($api_token);
 
 			if(empty($api_token) || !preg_match('#^[\w-]+$#si', $api_token)) {
