@@ -146,6 +146,37 @@ Class Drip_Api {
         return $data;
     }
 
+		/**
+		 * Requests the subscribers to a particular campaign
+		 * Returns an array of subscribers, as well as the meta for pagination
+		 * @param void
+		 * @return bool/array
+		 */
+		public function get_subscribers($params = array()) {
+			if(empty($params['account_id'])) {
+				throw new Exception("Account ID not specified");
+			}
+
+			if(empty($params['campaign_id'])) {
+				throw new Exception("Campaign ID not specified");
+			}
+
+			$account_id = $params['account_id'];
+			$campaign_id = $params['campaign_id'];
+			unset($params['account_id'], $params['campaign_id']); // clear it from the params
+
+			$url = "{$this->api_end_point}{$account_id}/campaigns/{$campaign_id}/subscribers";
+			$res = $this->make_request($url, $params);
+
+			if (!empty($res['buffer'])) {
+					$raw_json = json_decode($res['buffer'], true);
+			}
+
+			$data = empty($raw_json) ? false : $raw_json;
+
+			return $data;
+		}
+
     /**
      * Sends a request to add a subscriber and returns its record or false
      *
