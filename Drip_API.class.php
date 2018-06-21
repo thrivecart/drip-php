@@ -86,6 +86,37 @@ Class Drip_Api {
     }
 
     /**
+     * Requests the tags for the given account.
+     * @param array
+     * @return array
+     */
+    public function get_tags($params) {
+        if (empty($params['account_id'])) {
+            throw new Exception("Account ID not specified");
+        }
+
+        $account_id = $params['account_id'];
+        unset($params['account_id']); // clear it from the params
+
+        $url = $this->api_end_point . "$account_id/tags";
+        $res = $this->make_request($url, $params);
+
+        if (!empty($res['buffer'])) {
+            $raw_json = json_decode($res['buffer'], true);
+        }
+
+        // here we distinguish errors from no tags.
+        // when there's no json that's an error
+        $tags = empty($raw_json)
+                ? false
+                : empty($raw_json['tags'])
+                    ? array()
+                    : $raw_json['tags'];
+
+        return $tags;
+    }
+
+    /**
      * Requests the campaigns for the given account.
      * @param array
      * @return array
