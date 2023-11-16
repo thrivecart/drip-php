@@ -5,7 +5,7 @@
  * @author Svetoslav Marinov (SLAVI)
  */
 Class Drip_Api {
-	private $version = "2";
+    private $version = "2";
     private $api_token = '';
     private $error_code = '';
     private $error_message = '';
@@ -29,22 +29,92 @@ Class Drip_Api {
      * @throws Exception
      */
     public function __construct($api_token = null) {
-			if(!empty($api_token)) {
-				$this->setApiToken($api_token);
-			}
+            if(!empty($api_token)) {
+                $this->setApiToken($api_token);
+            }
     }
 
-		public function setApiToken($api_token = '') {
-			$api_token = trim($api_token);
+        public function setApiToken($api_token = '') {
+            $api_token = trim($api_token);
 
-			if(empty($api_token) || !preg_match('#^[\w-]+$#si', $api_token)) {
-				throw new Exception("Missing or invalid Drip API token.");
-			}
+            if(empty($api_token) || !preg_match('#^[\w-]+$#si', $api_token)) {
+                throw new Exception("Missing or invalid Drip API token.");
+            }
 
-			$this->api_token = $api_token;
+            $this->api_token = $api_token;
 
-			return $this;
-		}
+            return $this;
+        }
+
+    /**
+     * Requests the workflows for the given account.
+     * @param array
+     * @return array
+     */
+    public function get_workflows($params) {
+        if (empty($params['account_id'])) {
+            throw new Exception("Account ID not specified");
+        }
+
+        $account_id = $params['account_id'];
+        unset($params['account_id']); // clear it from the params
+
+        if (isset($params['status'])) {
+            if (!in_array($params['status'], array('active', 'draft', 'paused', 'all'))) {
+                throw new Exception("Invalid workflow status.");
+            }
+        } elseif (0) {
+            $params['status'] = 'active'; // api defaults to all but we want active ones
+        }
+
+        $url = $this->api_end_point . "$account_id/workflows";
+        $res = $this->make_request($url, $params);
+
+        if (!empty($res['buffer'])) {
+            $raw_json = json_decode($res['buffer'], true);
+        }
+
+        // here we distinguish errors from no workflows.
+        // when there's no json that's an error
+        $workflows = empty($raw_json)
+                ? false
+                : empty($raw_json['workflows'])
+                    ? array()
+                    : $raw_json['workflows'];
+
+        return $workflows;
+    }
+
+    /**
+     * Requests the tags for the given account.
+     * @param array
+     * @return array
+     */
+    public function get_tags($params) {
+        if (empty($params['account_id'])) {
+            throw new Exception("Account ID not specified");
+        }
+
+        $account_id = $params['account_id'];
+        unset($params['account_id']); // clear it from the params
+
+        $url = $this->api_end_point . "$account_id/tags";
+        $res = $this->make_request($url, $params);
+
+        if (!empty($res['buffer'])) {
+            $raw_json = json_decode($res['buffer'], true);
+        }
+
+        // here we distinguish errors from no tags.
+        // when there's no json that's an error
+        $tags = empty($raw_json)
+                ? false
+                : empty($raw_json['tags'])
+                    ? array()
+                    : $raw_json['tags'];
+
+        return $tags;
+    }
 
     /**
      * Requests the campaigns for the given account.
@@ -146,36 +216,36 @@ Class Drip_Api {
         return $data;
     }
 
-		/**
-		 * Requests the subscribers to a particular campaign
-		 * Returns an array of subscribers, as well as the meta for pagination
-		 * @param void
-		 * @return bool/array
-		 */
-		public function get_subscribers($params = array()) {
-			if(empty($params['account_id'])) {
-				throw new Exception("Account ID not specified");
-			}
+        /**
+         * Requests the subscribers to a particular campaign
+         * Returns an array of subscribers, as well as the meta for pagination
+         * @param void
+         * @return bool/array
+         */
+        public function get_subscribers($params = array()) {
+            if(empty($params['account_id'])) {
+                throw new Exception("Account ID not specified");
+            }
 
-			if(empty($params['campaign_id'])) {
-				throw new Exception("Campaign ID not specified");
-			}
+            if(empty($params['campaign_id'])) {
+                throw new Exception("Campaign ID not specified");
+            }
 
-			$account_id = $params['account_id'];
-			$campaign_id = $params['campaign_id'];
-			unset($params['account_id'], $params['campaign_id']); // clear it from the params
+            $account_id = $params['account_id'];
+            $campaign_id = $params['campaign_id'];
+            unset($params['account_id'], $params['campaign_id']); // clear it from the params
 
-			$url = "{$this->api_end_point}{$account_id}/campaigns/{$campaign_id}/subscribers";
-			$res = $this->make_request($url, $params);
+            $url = "{$this->api_end_point}{$account_id}/campaigns/{$campaign_id}/subscribers";
+            $res = $this->make_request($url, $params);
 
-			if (!empty($res['buffer'])) {
-					$raw_json = json_decode($res['buffer'], true);
-			}
+            if (!empty($res['buffer'])) {
+                    $raw_json = json_decode($res['buffer'], true);
+            }
 
-			$data = empty($raw_json) ? false : $raw_json;
+            $data = empty($raw_json) ? false : $raw_json;
 
-			return $data;
-		}
+            return $data;
+        }
 
     /**
      * Sends a request to add a subscriber and returns its record or false
@@ -476,14 +546,14 @@ Class Drip_Api {
      * @throws Exception
      */
     public function request ($url, $params = array(), $req_method = self::GET) {
-    	$request = $this->make_request($this->api_end_point.$url, $params, $req_method);
-    	$body = json_decode($request['buffer'], TRUE);
+        $request = $this->make_request($this->api_end_point.$url, $params, $req_method);
+        $body = json_decode($request['buffer'], TRUE);
 
-    	if (empty($body)) {
-    	    return;
+        if (empty($body)) {
+            return;
         }
 
-    	return $body;
+        return $body;
     }
 
     /**
