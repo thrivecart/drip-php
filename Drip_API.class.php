@@ -76,13 +76,14 @@ Class Drip_Api {
 
         // here we distinguish errors from no workflows.
         // when there's no json that's an error
-        $workflows = empty($raw_json)
-                ? false
-                : empty($raw_json['workflows'])
-                    ? array()
-                    : $raw_json['workflows'];
-
-        return $workflows;
+        if (empty($raw_json)) {
+            return false;
+        }
+        
+        return empty($raw_json['workflows'])
+            ? []
+            : $raw_json['workflows']
+        ;
     }
 
     /**
@@ -107,13 +108,13 @@ Class Drip_Api {
 
         // here we distinguish errors from no tags.
         // when there's no json that's an error
-        $tags = empty($raw_json)
-                ? false
-                : empty($raw_json['tags'])
-                    ? array()
-                    : $raw_json['tags'];
-
-        return $tags;
+        if (empty($raw_json)) {
+            return false;
+        }
+        return empty($raw_json['tags'])
+            ? []
+            : $raw_json['tags']
+        ;
     }
 
     /**
@@ -146,13 +147,13 @@ Class Drip_Api {
 
         // here we distinguish errors from no campaigns.
         // when there's no json that's an error
-        $campaigns = empty($raw_json)
-                ? false
-                : empty($raw_json['campaigns'])
-                    ? array()
-                    : $raw_json['campaigns'];
-
-        return $campaigns;
+        if (empty($raw_json)) {
+            return false;
+        }
+        return empty($raw_json['campaigns'])
+            ? []
+            : $raw_json['campaigns']
+        ;
     }
 
     /**
@@ -184,13 +185,13 @@ Class Drip_Api {
 
         // here we distinguish errors from no campaign
         // when there's no json that's an error
-        $campaigns = empty($raw_json)
-                ? false
-                : empty($raw_json['campaigns'])
-                    ? array()
-                    : $raw_json['campaigns'];
-
-        return $campaigns;
+        if (empty($raw_json)) {
+            return false;
+        }
+        return empty($raw_json['campaigns'])
+            ? []
+            : $raw_json['campaigns']
+        ;
     }
 
     /**
@@ -207,13 +208,13 @@ Class Drip_Api {
             $raw_json = json_decode($res['buffer'], true);
         }
 
-        $data = empty($raw_json)
-            ? false
-            : empty($raw_json['accounts'])
-                ? array()
-                : $raw_json['accounts'];
-
-        return $data;
+        if (empty($raw_json)) {
+            return false;
+        }
+        return empty($raw_json['accounts'])
+            ? []
+            : $raw_json['accounts']
+        ;
     }
 
         /**
@@ -273,13 +274,14 @@ Class Drip_Api {
             $raw_json = json_decode($res['buffer'], true);
         }
 
-        $data = empty($raw_json)
-            ? false
-            : empty($raw_json['subscribers'])
-                ? array()
-                : $raw_json['subscribers'][0];
-
-        return $data;
+        if (empty($raw_json)) {
+            return false;
+        }
+        
+        return empty($raw_json['subscribers'])
+            ? []
+            : $raw_json['subscribers'][0]
+        ;
     }
 
     /**
@@ -316,13 +318,13 @@ Class Drip_Api {
             $raw_json = json_decode($res['buffer'], true);
         }
 
-        $data = empty($raw_json)
-            ? false
-            : empty($raw_json['subscribers'])
-                ? array()
-                : $raw_json['subscribers'][0];
-
-        return $data;
+        if (empty($raw_json)) {
+            return false;
+        }
+        return empty($raw_json['subscribers'])
+            ? []
+            : $raw_json['subscribers'][0]
+        ;
     }
 
     /**
@@ -366,13 +368,13 @@ Class Drip_Api {
             $raw_json = json_decode($res['buffer'], true);
         }
 
-        $data = empty($raw_json)
-            ? false
-            : empty($raw_json['subscribers'])
-                ? array()
-                : $raw_json['subscribers'][0];
-
-        return $data;
+        if (empty($raw_json)) {
+            return false;
+        }
+        return empty($raw_json['subscribers'])
+            ? []
+            : $raw_json['subscribers'][0]
+        ;
     }
 
     /**
@@ -412,13 +414,13 @@ Class Drip_Api {
             $raw_json = json_decode($res['buffer'], true);
         }
 
-        $data = empty($raw_json)
-            ? false
-            : empty($raw_json['subscribers'])
-                ? array()
-                : $raw_json['subscribers'][0];
-
-        return $data;
+        if (empty($raw_json)) {
+            return [];
+        }
+        return empty($raw_json['subscribers'])
+            ? []
+            : $raw_json['subscribers'][0]
+        ;
     }
 
     /**
